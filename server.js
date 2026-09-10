@@ -2,7 +2,7 @@ const http = require('http');
 const fs   = require('fs');
 const path = require('path');
 
-const PORT     = process.env.PORT || 3000;
+const PORT     = process.env.PORT || 3100;
 const ROOT     = __dirname;
 const CSV_PATH = path.join(ROOT, 'resultados.csv');
 const HEADERS  = ['Data', 'Nome', 'Email', 'Escola', 'Serie', 'Telefone', 'Acertos', 'Total', 'Percentual'];

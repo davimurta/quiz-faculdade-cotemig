@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Cotemig</title>
+    <title>Quiz Faculdade Cotemig</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -416,7 +416,7 @@
     <div id="screen-login" class="screen active">
         <div class="card">
             <div class="card-body">
-                <h1>Quiz Cotemig</h1>
+                <h1>Quiz Faculdade Cotemig</h1>
                 <p class="subtitle">Teste seus conhecimentos sobre a Faculdade COTEMIG!</p>
 
                 <div class="form-group">
@@ -531,7 +531,7 @@
     <script>
         const TOTAL_PERGUNTAS = 5;
         const CSV_STORAGE_KEY = "quiz_cotemig_resultados";
-        const PENDENTES_KEY   = "quiz_cotemig_pendentes";
+        const PENDENTES_KEY = "quiz_cotemig_pendentes";
 
         const PERGUNTAS_URL = "perguntas.json";
 
@@ -847,22 +847,22 @@
         }
 
         function updateSavedCount() {
-            const n         = getStoredResults().length;
+            const n = getStoredResults().length;
             const pendentes = getPendentes().length;
-            const el        = document.getElementById('saved-count');
+            const el = document.getElementById('saved-count');
             if (!el) return;
 
             const partes = [];
-            if (n)         partes.push(`${n} resultado${n > 1 ? 's' : ''} registrado${n > 1 ? 's' : ''} neste dispositivo`);
+            if (n) partes.push(`${n} resultado${n > 1 ? 's' : ''} registrado${n > 1 ? 's' : ''} neste dispositivo`);
             if (pendentes) partes.push(`${pendentes} aguardando envio ao CSV`);
             el.textContent = partes.length ? partes.join(' · ') + '.' : '';
         }
 
         function enviarResultado(record) {
             return fetch('/api/resultado', {
-                method:  'POST',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify(record)
+                body: JSON.stringify(record)
             }).then(res => {
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 return res.json();
@@ -871,7 +871,7 @@
 
         // Tenta enviar tudo que está na fila; o que falhar continua guardado para a próxima tentativa.
         function enviarPendentes() {
-            const fila      = getPendentes();
+            const fila = getPendentes();
             const restantes = [];
 
             return fila.reduce(
@@ -894,19 +894,19 @@
             updateSavedCount();
 
             const statusEl = document.getElementById('send-status');
-            statusEl.className   = 'send-status';
+            statusEl.className = 'send-status';
             statusEl.textContent = 'Salvando resultado…';
 
             return enviarPendentes().then(({ restantes }) => {
                 updateSavedCount();
 
                 if (!restantes) {
-                    statusEl.className   = 'send-status';
+                    statusEl.className = 'send-status';
                     statusEl.textContent = '✓ Resultado salvo no arquivo resultados.csv.';
                     return;
                 }
 
-                statusEl.className   = 'send-status err';
+                statusEl.className = 'send-status err';
                 statusEl.textContent = location.protocol === 'file:'
                     ? '⚠ Página aberta como arquivo (file://) — rode "node server.js" e use http://localhost:3000 para gravar no CSV.'
                     : `⚠ Servidor fora do ar — ${restantes} resultado(s) guardado(s) no navegador. Assim que o servidor voltar, recarregue esta página para enviá-los.`;
