@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Cotemig</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: #40AA0B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+        }
+
+        .site-header img {
+            height: 72px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F5F5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 150px 20px 20px;
+        }
+
+        :root {
+            --green: #40AA0B;
+            --green-dark: #339009;
+            --green-light: #e8f5e1;
+            --red: #e53935;
+            --text: #1a1a1a;
+            --muted: #666;
+            --border: #e0e0e0;
+            --radius: 12px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 32px;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            color: var(--text);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        .form-group {
+            margin-top: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px;
+            padding-right: 42px;
+            cursor: pointer;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green);
+        }
+
+        input.error,
+        select.error {
+            border-color: var(--red);
+        }
+
+        .error-msg {
+            color: var(--red);
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+            line-height: 1.45;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .error-msg p+p {
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 13px 24px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--green-dark);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .welcome-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .info-box {
+            background: var(--green-light);
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .info-box ul {
+            padding-left: 18px;
+            margin-top: 8px;
+        }
+
+        .info-box li {
+            margin-top: 6px;
+        }
+
+        .progress-wrapper {
+            padding: 20px 24px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 99px;
+            transition: width 0.4s ease;
+        }
+
+        .question-wrapper {
+            padding: 24px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .alternatives {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alt-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.93rem;
+            color: var(--text);
+            transition: border-color 0.18s, background 0.18s;
+            width: 100%;
+        }
+
+        .alt-btn:hover {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .alt-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.82rem;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeUp 0.28s ease both;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .score-circle {
+            width: 118px;
+            height: 118px;
+            border-radius: 50%;
+            background: var(--green-light);
+            border: 4px solid var(--green);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .score-number {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--green);
+            line-height: 1;
+        }
+
+        .score-unit {
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .score-text {
+            font-size: 0.97rem;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .score-msg {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .send-status {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: center;
+            min-height: 18px;
+            margin-bottom: 14px;
+        }
+
+        .send-status.err {
+            color: var(--red);
+        }
+
+        .saved-count {
+            font-size: 0.78rem;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .site-header {
+                height: 92px;
+            }
+
+            .site-header img {
+                height: 54px;
+            }
+
+            body {
+                padding: 116px 20px 20px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .question-wrapper {
+                padding: 16px;
+            }
+
+            .progress-wrapper {
+                padding: 16px 16px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <img src="logo-white.svg" alt="Cotemig">
+    </header>
+
+    <div id="screen-login" class="screen active">
+        <div class="card">
+            <div class="card-body">
+                <h1>Quiz Cotemig</h1>
+                <p class="subtitle">Teste seus conhecimentos sobre a Faculdade COTEMIG!</p>
+
+                <div class="form-group">
+                    <label for="nome">Nome completo</label>
+                    <input type="text" id="nome" placeholder="Digite seu nome completo" autocomplete="off">
+                    <div class="error-msg" id="nome-error">Por favor, informe seu nome.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="seu@email.com" autocomplete="off">
+                    <div class="error-msg" id="email-error">Por favor, informe um e-mail válido.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="escola">Escola em que estuda</label>
+                    <input type="text" id="escola" placeholder="Nome da sua escola" autocomplete="off">
+                    <div class="error-msg" id="escola-error">Por favor, informe a escola em que estuda.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="serie">Série que está cursando</label>
+                    <select id="serie">
+                        <option value="">Selecione a série</option>
+                        <option value="6º ano - Ensino Fundamental">6º ano - Ensino Fundamental</option>
+                        <option value="7º ano - Ensino Fundamental">7º ano - Ensino Fundamental</option>
+                        <option value="8º ano - Ensino Fundamental">8º ano - Ensino Fundamental</option>
+                        <option value="9º ano - Ensino Fundamental">9º ano - Ensino Fundamental</option>
+                        <option value="1º ano - Ensino Médio">1º ano - Ensino Médio</option>
+                        <option value="2º ano - Ensino Médio">2º ano - Ensino Médio</option>
+                        <option value="3º ano - Ensino Médio">3º ano - Ensino Médio</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                    <div class="error-msg" id="serie-error">Por favor, selecione a série que está cursando.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="off">
+                    <div class="error-msg" id="tel-error">Por favor, informe um telefone válido.</div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="handleLogin()">Começar Quiz →</button>
+                    <div class="error-msg" id="load-error"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-intro" class="screen">
+        <div class="card">
+            <div class="card-body">
+                <p style="color:var(--muted);font-size:0.9rem;">Olá,</p>
+                <div class="welcome-name" id="welcome-name"></div>
+                <p style="margin-top:6px;color:var(--muted);">Prepare-se para o desafio!</p>
+
+                <div class="info-box">
+                    <strong>Como funciona:</strong>
+                    <ul>
+                        <li id="info-total"></li>
+                        <li>As perguntas são embaralhadas a cada rodada.</li>
+                        <li>Seu resultado aparece somente ao final.</li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-primary" onclick="startQuiz()">Iniciar Quiz →</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-quiz" class="screen">
+        <div class="card">
+            <div class="progress-wrapper">
+                <div class="progress-label">
+                    <span id="progress-text"></span>
+                    <span id="progress-pct"></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+                </div>
+            </div>
+
+            <div class="question-wrapper">
+                <div class="question-text" id="question-text"></div>
+                <div class="alternatives" id="alternatives"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen-result" class="screen">
+        <div class="card">
+            <div class="card-body">
+                <h2 style="text-align:center;margin-bottom:4px;">Resultado Final</h2>
+
+                <div class="score-display">
+                    <div class="score-circle">
+                        <div class="score-number" id="score-number">—</div>
+                        <div class="score-unit">acertos</div>
+                    </div>
+                    <p class="score-text" id="score-text"></p>
+                    <p class="score-msg" id="score-msg"></p>
+                </div>
+
+                <div class="send-status" id="send-status"></div>
+                <button class="btn btn-primary" onclick="restartQuiz()">Refazer Quiz</button>
+                <p class="saved-count" id="saved-count"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TOTAL_PERGUNTAS = 5;
+        const CSV_STORAGE_KEY = "quiz_cotemig_resultados";
+        const PENDENTES_KEY   = "quiz_cotemig_pendentes";
+
+        const PERGUNTAS_URL = "perguntas.json";
+
+        let PERGUNTAS = [];
+
+        let quizQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+        let userData = {};
+
+        const letra = i => String.fromCharCode(65 + i);   // 0 = A, 1 = B, 2 = C...
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupPhoneMask();
+            carregarPerguntas();
+            enviarPendentes().then(updateSavedCount);   // reenvia resultados presos de sessões anteriores
+        });
+
+        function carregarPerguntas() {
+            return fetch(PERGUNTAS_URL)
+                .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+                .then(dados => {
+                    const { validas, problemas } = normalizarPerguntas(dados);
+                    PERGUNTAS = validas;
+
+                    if (!validas.length) {
+                        mostrarAvisoPerguntas([
+                            `Nenhuma pergunta válida foi encontrada em ${PERGUNTAS_URL}.`
+                        ].concat(problemas));
+                    } else if (problemas.length) {
+                        mostrarAvisoPerguntas([
+                            `${problemas.length} pergunta(s) de ${PERGUNTAS_URL} foram ignoradas:`
+                        ].concat(problemas));
+                    } else {
+                        mostrarAvisoPerguntas([]);
+                    }
+                })
+                .catch(erro => {
+                    mostrarAvisoPerguntas([
+                        `Não foi possível ler o arquivo ${PERGUNTAS_URL}.`,
+                        location.protocol === 'file:'
+                            ? 'A página foi aberta direto do arquivo (file://). Rode "node server.js" e abra http://localhost:3000 — só assim o quiz lê as perguntas e grava no CSV.'
+                            : 'Verifique se o servidor está rodando (node server.js) e se o arquivo não tem erro de digitação — uma vírgula ou aspas a mais já é suficiente para quebrar.',
+                        'Detalhe técnico: ' + erro.message
+                    ]);
+                });
+        }
+
+        // Aceita o formato novo ({ perguntas: [...] } com "resposta_correta" em texto)
+        // e o formato antigo (lista direta com "correta" por número).
+        function normalizarPerguntas(dados) {
+            const lista = Array.isArray(dados) ? dados : (dados && dados.perguntas) || [];
+            const validas = [];
+            const problemas = [];
+
+            lista.forEach((item, i) => {
+                const numero = i + 1;
+                item = item || {};
+
+                if (!('pergunta' in item)) return;   // pergunta desativada: ignorada em silêncio
+
+                const pergunta = String(item.pergunta || '').trim();
+                const alternativas = (Array.isArray(item.alternativas) ? item.alternativas : [])
+                    .map(alt => String(alt == null ? '' : alt).trim())
+                    .filter(Boolean);
+
+                if (!pergunta) {
+                    problemas.push(`Pergunta ${numero}: o texto do campo "pergunta" está vazio.`);
+                    return;
+                }
+                if (alternativas.length < 2) {
+                    problemas.push(`Pergunta ${numero}: são necessárias pelo menos 2 alternativas.`);
+                    return;
+                }
+
+                const resposta = typeof item.resposta_correta === 'string' ? item.resposta_correta.trim() : '';
+                let correta;
+
+                if (resposta) {
+                    correta = alternativas.findIndex(alt => alt.toLowerCase() === resposta.toLowerCase());
+                    if (correta === -1) {
+                        problemas.push(`Pergunta ${numero}: a "resposta_correta" ("${resposta}") não é igual a nenhuma das alternativas — copie e cole o texto exato de uma delas.`);
+                        return;
+                    }
+                } else if (Number.isInteger(item.correta) && item.correta >= 0 && item.correta < alternativas.length) {
+                    correta = item.correta;          // formato antigo, por número
+                } else {
+                    problemas.push(`Pergunta ${numero}: falta o campo "resposta_correta" com o texto da alternativa certa.`);
+                    return;
+                }
+
+                validas.push({ pergunta, alternativas, correta });
+            });
+
+            return { validas, problemas };
+        }
+
+        function mostrarAvisoPerguntas(linhas) {
+            const box = document.getElementById('load-error');
+            box.innerHTML = '';
+            linhas.forEach(texto => {
+                const p = document.createElement('p');
+                p.textContent = texto;
+                box.appendChild(p);
+            });
+            box.classList.toggle('show', linhas.length > 0);
+        }
+
+        function setupPhoneMask() {
+            const input = document.getElementById('telefone');
+            input.addEventListener('input', () => {
+                let v = input.value.replace(/\D/g, '');
+                if (v.length > 11) v = v.slice(0, 11);
+                if (v.length > 6) v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+                else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+                else if (v.length > 0) v = `(${v}`;
+                input.value = v;
+            });
+        }
+
+        function handleLogin() {
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const escola = document.getElementById('escola').value.trim();
+            const serie = document.getElementById('serie').value;
+            const telefone = document.getElementById('telefone').value.trim();
+            let valid = true;
+
+            if (!nome) {
+                document.getElementById('nome').classList.add('error');
+                document.getElementById('nome-error').classList.add('show');
+                valid = false;
+            } else {
+                document.getElementById('nome').classList.remove('error');
+                document.getElementById('nome-error').classList.remove('show');
+            }
+
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!emailOk) {
+                document.getElementById('email').classList.add('error');
+                document.getElementById('email-error').classList.add('show');
+                valid = false;
+            } else {
+                document.getElementById('email').classList.remove('error');
+                document.getElementById('email-error').classList.remove('show');
+            }
+
+            if (!escola) {
+                document.getElementById('escola').classList.add('error');
+                document.getElementById('escola-error').classList.add('show');
+                valid = false;
+            } else {
+                document.getElementById('escola').classList.remove('error');
+                document.getElementById('escola-error').classList.remove('show');
+            }
+
+            if (!serie) {
+                document.getElementById('serie').classList.add('error');
+                document.getElementById('serie-error').classList.add('show');
+                valid = false;
+            } else {
+                document.getElementById('serie').classList.remove('error');
+                document.getElementById('serie-error').classList.remove('show');
+            }
+
+            const digits = telefone.replace(/\D/g, '');
+            if (digits.length < 10) {
+                document.getElementById('telefone').classList.add('error');
+                document.getElementById('tel-error').classList.add('show');
+                valid = false;
+            } else {
+                document.getElementById('telefone').classList.remove('error');
+                document.getElementById('tel-error').classList.remove('show');
+            }
+
+            if (!valid) return;
+
+            if (!PERGUNTAS.length) {
+                document.getElementById('load-error').classList.add('show');
+                carregarPerguntas();
+                return;
+            }
+
+            userData = { nome, email, escola, serie, telefone };
+            document.getElementById('welcome-name').textContent = nome.split(' ')[0];
+            const quantidade = Math.min(TOTAL_PERGUNTAS, PERGUNTAS.length);
+            document.getElementById('info-total').textContent =
+                `Serão ${quantidade} perguntas sobre a Faculdade COTEMIG.`;
+
+            showScreen('screen-intro');
+        }
+
+        function startQuiz() {
+            currentIndex = 0;
+            score = 0;
+            const pool = shuffle([...PERGUNTAS]);
+            quizQuestions = pool.slice(0, Math.min(TOTAL_PERGUNTAS, pool.length)).map(shuffleAlternatives);
+            renderQuestion();
+            showScreen('screen-quiz');
+        }
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function shuffleAlternatives(q) {
+            const tagged = q.alternativas.map((alt, i) => ({ alt, isCorrect: i === q.correta }));
+            const shuffled = shuffle(tagged);
+            return {
+                pergunta: q.pergunta,
+                alternativas: shuffled.map(a => a.alt),
+                correta: shuffled.findIndex(a => a.isCorrect)
+            };
+        }
+
+        function renderQuestion() {
+            answered = false;
+
+            const q = quizQuestions[currentIndex];
+            const total = quizQuestions.length;
+            const num = currentIndex + 1;
+
+            const pct = Math.round(((num - 1) / total) * 100);
+            document.getElementById('progress-text').textContent = `Pergunta ${num} de ${total}`;
+            document.getElementById('progress-pct').textContent = `${pct}%`;
+            document.getElementById('progress-fill').style.width = `${pct}%`;
+
+            const qEl = document.getElementById('question-text');
+            qEl.classList.remove('fade-in');
+            void qEl.offsetWidth;
+            qEl.textContent = q.pergunta;
+            qEl.classList.add('fade-in');
+
+            const container = document.getElementById('alternatives');
+            container.innerHTML = '';
+            q.alternativas.forEach((alt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'alt-btn fade-in';
+                btn.style.animationDelay = `${i * 0.05}s`;
+                btn.innerHTML = `<span class="alt-letter">${letra(i)}</span><span>${alt}</span>`;
+                btn.onclick = () => selectAnswer(i);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(chosen) {
+            if (answered) return;
+            answered = true;
+
+            if (chosen === quizQuestions[currentIndex].correta) score++;
+
+            currentIndex++;
+            if (currentIndex >= quizQuestions.length) {
+                showResult();
+            } else {
+                renderQuestion();
+            }
+        }
+
+        function showResult() {
+            const total = quizQuestions.length;
+            const pct = Math.round((score / total) * 100);
+
+            document.getElementById('score-number').textContent = score;
+            document.getElementById('score-text').textContent =
+                `Você acertou ${score} de ${total} perguntas — ${pct}%`;
+
+            let msg;
+            if (pct <= 40) msg = '💪 Continue conhecendo o COTEMIG!';
+            else if (pct <= 70) msg = '👍 Bom resultado! Você conhece o COTEMIG.';
+            else msg = '🏆 Excelente! Você é fera no COTEMIG!';
+            document.getElementById('score-msg').textContent = msg;
+
+            const record = {
+                data: new Date().toISOString(),
+                nome: userData.nome,
+                email: userData.email,
+                escola: userData.escola,
+                serie: userData.serie,
+                telefone: userData.telefone,
+                acertos: score,
+                total,
+                percentual: pct
+            };
+
+            showScreen('screen-result');
+            saveResult(record);
+        }
+
+        function getStoredResults() {
+            try {
+                return JSON.parse(localStorage.getItem(CSV_STORAGE_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function getPendentes() {
+            try {
+                return JSON.parse(localStorage.getItem(PENDENTES_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function setPendentes(lista) {
+            localStorage.setItem(PENDENTES_KEY, JSON.stringify(lista));
+        }
+
+        function updateSavedCount() {
+            const n         = getStoredResults().length;
+            const pendentes = getPendentes().length;
+            const el        = document.getElementById('saved-count');
+            if (!el) return;
+
+            const partes = [];
+            if (n)         partes.push(`${n} resultado${n > 1 ? 's' : ''} registrado${n > 1 ? 's' : ''} neste dispositivo`);
+            if (pendentes) partes.push(`${pendentes} aguardando envio ao CSV`);
+            el.textContent = partes.length ? partes.join(' · ') + '.' : '';
+        }
+
+        function enviarResultado(record) {
+            return fetch('/api/resultado', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(record)
+            }).then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            });
+        }
+
+        // Tenta enviar tudo que está na fila; o que falhar continua guardado para a próxima tentativa.
+        function enviarPendentes() {
+            const fila      = getPendentes();
+            const restantes = [];
+
+            return fila.reduce(
+                (anterior, record) => anterior.then(() =>
+                    enviarResultado(record).catch(() => { restantes.push(record); })
+                ),
+                Promise.resolve()
+            ).then(() => {
+                setPendentes(restantes);
+                return { enviados: fila.length - restantes.length, restantes: restantes.length };
+            });
+        }
+
+        function saveResult(record) {
+            const results = getStoredResults();
+            results.push(record);
+            localStorage.setItem(CSV_STORAGE_KEY, JSON.stringify(results));
+
+            setPendentes(getPendentes().concat([record]));
+            updateSavedCount();
+
+            const statusEl = document.getElementById('send-status');
+            statusEl.className   = 'send-status';
+            statusEl.textContent = 'Salvando resultado…';
+
+            return enviarPendentes().then(({ restantes }) => {
+                updateSavedCount();
+
+                if (!restantes) {
+                    statusEl.className   = 'send-status';
+                    statusEl.textContent = '✓ Resultado salvo no arquivo resultados.csv.';
+                    return;
+                }
+
+                statusEl.className   = 'send-status err';
+                statusEl.textContent = location.protocol === 'file:'
+                    ? '⚠ Página aberta como arquivo (file://) — rode "node server.js" e use http://localhost:3000 para gravar no CSV.'
+                    : `⚠ Servidor fora do ar — ${restantes} resultado(s) guardado(s) no navegador. Assim que o servidor voltar, recarregue esta página para enviá-los.`;
+            });
+        }
+
+        function restartQuiz() {
+            document.getElementById('nome').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('escola').value = '';
+            document.getElementById('serie').value = '';
+            document.getElementById('telefone').value = '';
+            ['nome', 'email', 'escola', 'serie', 'telefone'].forEach(id => {
+                document.getElementById(id).classList.remove('error');
+            });
+            document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+            userData = {};
+            showScreen('screen-login');
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

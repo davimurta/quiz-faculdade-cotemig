@@ -1,0 +1,5 @@
+# Resultados contêm dados pessoais dos participantes — não versionar
+resultados.csv
+
+.DS_Store
+node_modules/

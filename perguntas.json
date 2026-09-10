@@ -1,0 +1,116 @@
+{
+  "_como_editar": [
+    "Este arquivo guarda as perguntas do quiz. Pode ser editado no Bloco de Notas ou em qualquer editor de texto.",
+    "Cada pergunta é um bloco entre chaves { }, e os blocos são separados por vírgula.",
+    "\"pergunta\" = o texto que aparece na tela para o participante.",
+    "\"alternativas\" = as opções de resposta, cada uma entre \"aspas\" e separadas por vírgula (de 2 a 6 opções).",
+    "\"resposta_correta\" = copie e cole aqui, exatamente igual, a alternativa que está certa.",
+    "Use sempre aspas duplas \" e nunca deixe vírgula depois do último item de uma lista.",
+    "Para criar uma pergunta nova: copie um bloco { ... } inteiro, cole no final da lista, coloque uma vírgula antes dele e troque os textos.",
+    "Para desativar uma pergunta sem apagar: troque o nome do campo \"pergunta\" por \"pergunta_desativada\".",
+    "Depois de salvar, recarregue a página do quiz (F5). Se algum bloco estiver errado, a própria página avisa qual pergunta tem problema.",
+    "O quiz sorteia 5 perguntas por rodada, então vale a pena manter várias aqui."
+  ],
+  "perguntas": [
+    {
+      "pergunta": "Em que ano foi criada a Faculdade COTEMIG?",
+      "alternativas": [
+        "1995",
+        "1999",
+        "2001",
+        "2005"
+      ],
+      "resposta_correta": "1999"
+    },
+    {
+      "pergunta": "Qual destes é um dos cursos oferecidos atualmente pela Faculdade COTEMIG?",
+      "alternativas": [
+        "Engenharia Civil",
+        "Administração",
+        "Ciência da Computação",
+        "Arquitetura e Urbanismo"
+      ],
+      "resposta_correta": "Ciência da Computação"
+    },
+    {
+      "pergunta": "Quantos cursos de graduação a Faculdade COTEMIG oferece atualmente?",
+      "alternativas": [
+        "Dois",
+        "Três",
+        "Quatro",
+        "Cinco"
+      ],
+      "resposta_correta": "Três"
+    },
+    {
+      "pergunta": "Qual dos cursos da Faculdade COTEMIG é um tecnólogo com duração de 2 anos e meio?",
+      "alternativas": [
+        "Sistemas de Informação",
+        "Ciência da Computação",
+        "Análise e Desenvolvimento de Sistemas",
+        "Engenharia de Software"
+      ],
+      "resposta_correta": "Análise e Desenvolvimento de Sistemas"
+    },
+    {
+      "pergunta": "Qual foi o primeiro curso oferecido pela Faculdade COTEMIG?",
+      "alternativas": [
+        "Ciência da Computação",
+        "Sistemas de Informação",
+        "Análise e Desenvolvimento de Sistemas",
+        "Engenharia de Software"
+      ],
+      "resposta_correta": "Sistemas de Informação"
+    },
+    {
+      "pergunta": "O que os três cursos da Faculdade COTEMIG têm em comum no primeiro ano?",
+      "alternativas": [
+        "Um módulo básico comum",
+        "Um estágio obrigatório",
+        "Uma disciplina de Administração",
+        "Uma formação técnica"
+      ],
+      "resposta_correta": "Um módulo básico comum"
+    },
+    {
+      "pergunta": "Qual destas empresas está entre as parceiras educacionais da Faculdade COTEMIG?",
+      "alternativas": [
+        "Google",
+        "Petrobras",
+        "Embraer",
+        "Natura"
+      ],
+      "resposta_correta": "Google"
+    },
+    {
+      "pergunta": "Qual destas é uma forma de ingresso oferecida pela Faculdade COTEMIG?",
+      "alternativas": [
+        "Nota do ENEM",
+        "Apenas vestibular presencial",
+        "Somente indicação de estudantes",
+        "Somente transferência internacional"
+      ],
+      "resposta_correta": "Nota do ENEM"
+    },
+    {
+      "pergunta": "Em qual cidade ficam as unidades de ensino do COTEMIG que atendem à Faculdade?",
+      "alternativas": [
+        "São Paulo",
+        "Rio de Janeiro",
+        "Belo Horizonte",
+        "Brasília"
+      ],
+      "resposta_correta": "Belo Horizonte"
+    },
+    {
+      "pergunta": "Qual destas áreas faz parte da formação oferecida pela Faculdade COTEMIG?",
+      "alternativas": [
+        "Tecnologia e Computação",
+        "Medicina e Saúde",
+        "Direito e Ciências Jurídicas",
+        "Engenharia Civil"
+      ],
+      "resposta_correta": "Tecnologia e Computação"
+    }
+  ]
+}
